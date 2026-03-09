@@ -1,0 +1,383 @@
+\documentclass[lettersize,journal]{IEEEtran}
+\IEEEoverridecommandlockouts
+% \usepackage[utf8]{inputenc}
+
+\usepackage{cite}
+\usepackage[utf8x]{inputenc} 
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage[shortlabels,inline]{enumitem}
+\usepackage{makecell}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{pifont}
+\usepackage{textcomp}
+\usepackage{ragged2e}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\usepackage{bm}
+\usepackage{arydshln}
+\usepackage{caption}
+\usepackage{multirow}
+\usepackage{tabularray}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{orcidlink}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{hhline}
+\usepackage[font=footnotesize,labelfont=bf,
+   justification=justified,
+   format=plain,skip=0pt,belowskip=0pt,aboveskip=0pt]{caption}
+\usepackage{textcomp}
+\usepackage[normalem]{ulem}
+\usepackage{tikz}
+
+\usepackage[capitalise,nameinlink]{cleveref}
+% \usepackage{color}
+\usepackage[normalem]{ulem}
+\usepackage{tabularray}
+\UseTblrLibrary{diagbox}
+
+\usepackage{etoolbox}
+
+
+
+\setlength{\intextsep}{0.3cm}
+\setlength{\textfloatsep}{0.2cm}
+\setlength{\floatsep}{0cm}
+\SetAlgoSkip{}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+
+\newcommand{\cmark}{\textcolor{green!50!black}{\ding{51}}}%
+\newcommand{\xmark}{\textcolor{red}{\ding{55}}}%
+%\newcommand{\SYS}{QUEST}
+\newcommand{\SYS}[0]{{{FLARE}}\xspace}
+
+\markboth{IEEE Internet of Things,~Vol.~x, No.~x, April.~2025}%
+{Younesi \MakeLowercase{\textit{et al.}}: \textit{FLARE}: Adaptive Multi-Dimensional Reputation for Robust Client Reliability in Federated Learning}
+\begin{document}
+
+\title{\textit{FLARE}: A Reputation-Based Federated Learning for Dynamic Client Reliability Assessment (Supplementary Material)}
+
+\author{Abolfazl Younesi\IEEEauthorrefmark{1}\,\orcidlink{0009-0003-0052-6475}\,(\IEEEmembership{Student, IEEE}),
+Leon Kiss\IEEEauthorrefmark{1}\,\orcidlink{0009-0008-7047-8102},
+Zahra Najafabadi Samani\IEEEauthorrefmark{1}\,\orcidlink{0000-0001-5182-9087},
+Juan Aznar Poveda  \IEEEauthorrefmark{2}\,\orcidlink{0000-0003-3193-2567}\,
+Thomas Fahringer\IEEEauthorrefmark{1}\,\orcidlink{0000-0003-4293-1228}\,(\IEEEmembership{Member, IEEE})
+        % <-this % stops a space
+\thanks{Manuscript received XX May. 2025; revised XX Aug. 2025 and xx yy 202x; accepted xx yy 202x. Date of publication xx yy 202x; date of current version x June 202x. (Corresponding author: Abolfazl Younesi.)
+
+A. Younesi, L. Kiss, Z. N. Samani, J. A. Poveda, and T. Fahringer are with the Department of Computer Science, University of Innsbruck, Innsbruck, Austria. E-mails: \{Abolfazl.Younesi, Zahra.Najafabadi-Samani, Juan.Aznar-Poveda, Thomas.Fahringer\}@uibk.ac.at
+}}
+
+
+\maketitle
+
+
+\section{Theoretical Analysis}
+
+\subsection{Convergence Guarantee}
+
+\textbf{Theorem A.1 (Convergence of FLARE).} Under the assumption that at most $f < N/2$ clients are malicious and the learning rate $\eta$ satisfies $\eta \leq \frac{1}{L}$ where $L$ is the Lipschitz constant, the \textit{FLARE} framework converges to a neighborhood of the optimal solution with probability at least $1-\delta$.
+
+\textbf{Proof Sketch.} Let $w^*$ be the optimal model and $w^t$ be the model at round $t$. Define the weighted aggregation as:
+\begin{equation}
+w^{t+1} = w^t + \eta \sum_{i \in \mathcal{C}_{\text{trusted}}^t} \frac{R_i^t n_i}{\sum_{j} R_j^t n_j} \Delta w_i^t
+\end{equation}
+
+Under reputation-weighted aggregation, the expected update direction satisfies:
+\begin{equation}
+\mathbb{E}[\Delta w^t | w^t] = -\nabla F(w^t) + \epsilon^t
+\end{equation}
+where $\epsilon^t$ is the bias introduced by malicious clients, bounded by $\|\epsilon^t\| \leq \frac{f}{N-f} \cdot \max(R_i^t) \cdot B$ for gradient bound $B$.
+
+Since $\max(R_i^t) \to 0$ for malicious clients as $t \to \infty$, we have $\|\epsilon^t\| \to 0$, ensuring convergence to a neighborhood of $w^*$ with radius $O(\eta)$.
+
+\subsection{Reputation Score Bounds}
+
+\textbf{Lemma A.1.} For any client $i$, the reputation score $R_i^t$ satisfies $0 \leq R_i^t \leq 1$ for all $t \geq 0$.
+
+\textbf{Lemma A.2.} A consistently malicious client's reputation score decays exponentially: $R_i^t \leq R_i^0 \cdot (1-\rho_{\text{down}})^{kt}$ where $k$ is the fraction of rounds the client participates.
+
+\subsection{ Attack Resilience Analysis}
+
+\textbf{Proposition A.1.} The multi-dimensional reputation scoring provides robustness against single-dimension attacks with a false negative rate bounded by:
+\begin{equation}
+P(\text{miss}) \leq \prod_{j=1}^{3} P(\text{miss}_j) \leq \epsilon^3
+\end{equation}
+where $\epsilon$ is the per-dimension miss probability.
+
+\section{Implementation Details}
+
+\subsection{Efficient Variance Vector Computation} \label{app:VarianceComputation}
+
+As described in Section III-B, our statistical anomaly score utilizes a standardized Euclidean distance, a computationally efficient form of the Mahalanobis distance that relies on a diagonal covariance approximation.
+
+This approximation only requires the parameter-wise variances (the diagonal elements of the covariance matrix $\Sigma$) rather than the full $d \times d$ matrix. To compute this variance vector $\sigma^2_t$ efficiently across rounds, we employ an incremental exponential moving average, as shown in Algorithm~\ref{alg:incremental_var}. This $O(d)$ computation avoids the infeasible $O(d^2)$ cost of computing the full covariance matrix.
+
+\begin{algorithm}[h]
+\caption{Incremental Variance Vector Update}
+\label{alg:incremental_var}
+\SetAlgoLined
+\SetAlgoNoEnd
+\scriptsize
+\KwIn{Previous variance vector $\sigma^2_{t-1}$, new updates $\{\Delta w_i^t\}$, decay $\alpha_{\text{cov}}$}
+\KwOut{Updated variance vector $\sigma^2_t$}
+\tcp{Compute the mean vector of the current round}
+$\mu^t \leftarrow \frac{1}{|\mathcal{C}_t|} \sum_{i \in \mathcal{C}_t} \Delta w_i^t$\;
+\tcp{Apply decay to the previous variance vector}
+$\sigma^2_t \leftarrow \alpha_{\text{cov}} \cdot \sigma^2_{t-1}$\;
+\tcp{Update variance vector with new data}
+\For{each $i \in \mathcal{C}_t$}{
+    $\delta \leftarrow \Delta w_i^t - \mu^t$\;
+    $\delta^2 \leftarrow \delta \odot \delta$\; \tcp{Element-wise square (computes a $d$-dim vector)}
+    $\sigma^2_t \leftarrow \sigma^2_t + \frac{1-\alpha_{\text{cov}}}{|\mathcal{C}_t|} \cdot \delta^2$\; \tcp{Element-wise vector addition}
+}
+\Return{$\sigma^2_t$} \tcp{Returns a vector of variances}
+\end{algorithm}
+
+The resulting variance vector $\sigma^2_t$ provides the values for the diagonal matrix $\Sigma$ in Equation 1. The term $\Sigma^{-1}$ is then simply the element-wise reciprocal $(1 / \sigma^2_t)$.
+
+\subsection{Grid Search Results} \label{app:grid}
+
+We performed an extensive grid search to determine the optimal hyperparameter (see Table \ref{tab:hyp}):
+
+\begin{table}[h]
+\centering
+\caption{Hyperparameter Grid Search (Best Values in Bold)}
+\label{tab:hyp}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Parameter} & \textbf{Range Tested} & \textbf{Best Value} & \textbf{Sensitivity} \\
+\midrule
+$\alpha$ & [0.5, 0.9] & \textbf{0.7} & Low \\
+$\beta$ & [0.4, 0.8] & \textbf{0.7} & Low \\
+$\gamma$ & [0.1, 0.5] & \textbf{0.4} & Medium \\
+$\delta$ & [0.2, 0.6] & \textbf{0.5} & Medium \\
+$\rho_{\text{up}}$ & [0.01, 0.1] & \textbf{0.05} & High \\
+$\rho_{\text{down}}$ & [0.1, 0.3] & \textbf{0.15} & High \\
+$\Theta_{\text{base}}$ & [0.3, 0.7] & \textbf{0.5} & Low \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure*}[t!]
+    \centering
+    % -------- Row 1 --------
+    \begin{subfigure}[t]{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{results/sensitivity_α.pdf}
+        \caption{Sensitivity of $\alpha$ (Consistency)}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{results/sensitivity_β.pdf}
+        \caption{Sensitivity of $\beta$ (Temporal)}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{results/sensitivity_γ.pdf}
+        \caption{Sensitivity of $\gamma$ (Convergence)}
+    \end{subfigure}
+
+    % -------- Row 2 --------
+    \begin{subfigure}[t]{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{results/sensitivity_δ.pdf}
+        \caption{Sensitivity of $\delta$ (Anomaly)}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{results/sensitivity_ρ_down_ρ_up.pdf}
+        \caption{Sensitivity of $\rho_{\text{down}}/\rho_{\text{up}}$}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{results/sensitivity_Θ_base.pdf}
+        \caption{Sensitivity of $\Theta_{\text{base}}$}
+    \end{subfigure}
+
+    \caption{Sensitivity analysis of key hyperparameters ($\alpha$, $\beta$, $\gamma$, $\delta$, $\rho_{\text{down}}/\rho_{\text{up}}$, $\Theta_{\text{base}}$).  
+    Each plot shows the effect of parameter variation on final test accuracy, with the optimal setting highlighted.}
+    \label{fig:sensitivity_analysis}
+\end{figure*}
+The sensitivity results in Fig.~\ref{fig:sensitivity_analysis} illustrate how the performance of \textsc{FLARE} varies as each key hyperparameter is perturbed across its admissible range. Subfigures (a)--(f) report the mean test accuracy along with the empirical standard deviation band and highlight the optimal setting for each parameter.
+
+
+\textbf{(a) Sensitivity of $\alpha$ (Consistency).}
+The parameter $\alpha$ controls the strength of consistency filtering applied to client updates. Performance remains stable for $\alpha \in [0.55, 0.80]$, with a clear optimum around $\alpha = 0.70$. Smaller values are insufficient to suppress inconsistent or malicious updates, whereas excessively large values become overly conservative and slightly degrade accuracy.
+
+\textbf{(b) Sensitivity of $\beta$ (Temporal).}
+$\beta$ determines the influence of temporal smoothness in the trust estimation process. Accuracy improves as $\beta$ increases from $0.40$ to approximately $0.70$, after which the gains taper off. This trend indicates that moderate temporal weighting enhances robustness while avoiding over-smoothing of update histories.
+
+\textbf{(c) Sensitivity of $\gamma$ (Convergence).}
+The convergence parameter $\gamma$ regulates the strength of convergence-aware regularization. \textsc{FLARE} shows stable behavior across the examined range, with the best performance near $\gamma = 0.40$. This confirms that a mild convergence penalty helps stabilize training without reducing adaptability in adversarial settings.
+
+\textbf{(d) Sensitivity of $\delta$ (Anomaly).}
+$\delta$ specifies the aggressiveness of anomaly detection. The model achieves its highest accuracy around $\delta = 0.50$. Smaller values provide insufficient anomaly suppression, whereas very large values over-penalize benign fluctuations. Nevertheless, the curve remains smooth, indicating that \textsc{FLARE} is not overly sensitive to $\delta$.
+
+\textbf{(e) Sensitivity of $\rho_{\text{down}}/\rho_{\text{up}}$.}
+This ratio determines the thresholds for downweighting or upweighting client contributions. Accuracy peaks when $\rho_{\text{down}}/\rho_{\text{up}} \approx 3.0$. Very small ratios fail to adequately discount harmful updates, while excessively large ratios become too restrictive and hinder effective learning.
+
+\textbf{(f) Sensitivity of $\Theta_{\text{base}}$.}
+$\Theta_{\text{base}}$ defines the baseline trust threshold. The accuracy curve is relatively flat, with a slight optimum around $\Theta_{\text{base}} = 0.50$. This demonstrates that \textsc{FLARE} is robust to a wide range of baseline threshold settings, reflecting the stability of its trust calibration mechanism.
+
+\smallskip
+\noindent
+Overall, the sensitivity analysis shows that \textsc{FLARE} maintains strong, stable performance across broad parameter ranges, with well-defined optimal regions that align with the algorithm's intended design behavior. The narrow standard deviation bands further indicate consistent performance across repeated trials.
+
+
+
+% \subsection{Robustness Results} \label{app:Robustness}
+% \begin{figure*}[t!]
+%     \centering
+%     \begin{subfigure}[t]{0.49\columnwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{results/robustness/CIFAR-10_Clean_comparison.pdf}
+%         \caption{Without Attack on CIFAR-10}
+%         \label{fig:CIFAR-10_Clean_comparison}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}[t]{0.49\columnwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{results/robustness/CIFAR-10_Adaptive_comparison.pdf}
+%         \caption{Adaptive Attack on CIFAR-10}
+%         \label{fig:CIFAR-10_Adaptive_comparison}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}[t]{0.49\columnwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{results/robustness/CIFAR-10_Gradient_Scaling_comparison.pdf}
+%         \caption{Gradient Scaling Attack on CIFAR-10}
+%         \label{fig:CIFAR-10_Gradient_Scaling_comparison}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}[t]{0.49\columnwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{results/robustness/CIFAR-10_Label_Flip_comparison.pdf}
+%         \caption{Label Flip Attack on CIFAR-10}
+%         \label{fig:CIFAR-10_Label_Flip_comparison}
+%     \end{subfigure}
+
+%     \begin{subfigure}[t]{0.49\columnwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{results/robustness/MNIST_Clean_comparison.pdf}
+%         \caption{Without Attack on MNIST}
+%         \label{fig:MNIST_Clean_comparison}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}[t]{0.49\columnwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{results/robustness/MNIST_Adaptive_comparison.pdf}
+%         \caption{Adaptive Attack on MNIST}
+%         \label{fig:MNIST_Adaptive_comparison}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}[t]{0.49\columnwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{results/robustness/MNIST_Gradient_Scaling_comparison.pdf}
+%         \caption{Gradient Scaling on MNIST}
+%         \label{fig:MNIST_Gradient_Scaling_comparison}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}[t]{0.49\columnwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{results/robustness/MNIST_Label_Flip_comparison.pdf}
+%         \caption{Label Flip on MNIST}
+%         \label{fig:MNIST_Label_Flip_comparison}
+%     \end{subfigure}
+
+%     \begin{subfigure}[t]{0.49\columnwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{results/robustness/SVHN_Clean_comparison.pdf}
+%         \caption{Without Attack on SVHN}
+%         \label{fig:SVHN_Clean_comparison}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}[t]{0.49\columnwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{results/robustness/SVHN_Adaptive_comparison.pdf}
+%         \caption{Adaptive Attack on SVHN}
+%         \label{fig:SVHN_Adaptive_comparison}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}[t]{0.49\columnwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{results/robustness/SVHN_Gradient_Scaling_comparison.pdf}
+%         \caption{Gradient Scaling on SVHN}
+%         \label{fig:SVHN_Gradient_Scaling_comparison}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}[t]{0.49\columnwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{results/robustness/SVHN_Label_Flip_comparison.pdf}
+%         \caption{Label Flip on SVHN}
+%         \label{fig:SVHN_Label_Flip_comparison}
+%     \end{subfigure}
+%     \caption{Comparison of test accuracy across various robust aggregation methods under different attack scenarios on CIFAR-10, MNIST, and SVHN datasets. The first column (a, e, i) shows baseline performance without attacks. The remaining columns evaluate resilience against adaptive attacks (b, f, j), gradient scaling (c, g, k), and label flip attacks (d, h, l). Results demonstrate how different defenses maintain performance as the fraction of malicious clients increases, highlighting the effectiveness of Byzantine-robust algorithms in preserving model accuracy under adversarial conditions.}
+%     \label{fig:Robustness}
+% \end{figure*}
+% Figure~\ref{fig:Robustness} compares \textit{FLARE} with FedAvg, Krum, Trimmed Mean, FLTrust, FLAME, BREA, and Repunet as the fraction of malicious clients rises from 5\% to 30\%. Across all datasets and all attack types, our method keeps the highest accuracy and the most stable trend. This pattern aligns with the results reported in Tables~\ref{tab:degradation_fraction} and~\ref{tab:ablation_main}, providing a visual representation of the robustness gains.
+
+% On CIFAR-10 in figures \ref{fig:CIFAR-10_Clean_comparison}–\ref{fig:CIFAR-10_Label_Flip_comparison}, accuracy with \textit{FLARE} remains at the top at every attacker level. The gap grows when attacks are stronger. Under adaptive attacks in Figure \ref{fig:CIFAR-10_Adaptive_comparison}, the advantage is evident at attacker rates of 20\% and 30\%. Temporal behavior ($r_3$) and reputation decay mitigate the impact of clients that change their behavior across rounds to rebuild trust. Under gradient scaling in Figure \ref{fig:CIFAR-10_Gradient_Scaling_comparison}, gradient clipping prevents any client from dominating the aggregation, and statistical anomaly scoring ($r_2$) flags abnormal magnitude patterns, resulting in a slow decline in accuracy. Under the label flip in Figure \ref{fig:CIFAR-10_Label_Flip_comparison}, performance consistency ($r_1$) detects updates that harm held-out or global performance, thereby protecting accuracy even when gradients are not strong outliers.
+% On MNIST in figures \ref{fig:MNIST_Clean_comparison}–\ref{fig:MNIST_Label_Flip_comparison}, absolute accuracy is high for all methods, but \textit{FLARE} still gives the best curve as the attacker rate increases. The slope of our curve is smaller than the slope of pruning-based baselines such as Krum and Trimmed Mean. Soft exclusion converts reputation into continuous weights rather than a hard accept or reject, allowing the server to retain useful signals from borderline but benign clients. This reduces unnecessary information loss under non-iid data, helping preserve accuracy as the attacker fraction increases.
+% On SVHN in figures \ref{fig:SVHN_Clean_comparison}–\ref{fig:SVHN_Label_Flip_comparison}, the task is more difficult and the gains are more visible. The drop in accuracy with more attackers is smallest for \textit{FLARE} across all attack types. The same mechanism explains this behavior: multi-dimensional scoring combines $r_1$, $r_2$, and $r_3$ to separate harmful clients from benign clients with skewed data; adaptive thresholds control participation as training evolves; soft exclusion and gradient clipping bound the impact of uncertain or adversarial updates.
+
+% Two cross-figure observations help explain why our method is better. First, the slope of the accuracy curve with respect to the attacker fraction is consistently lowest for \textit{FLARE}. This agrees with Table~\ref{tab:degradation_fraction}, where the full system shows the smallest drop as the malicious fraction rises. Second, when we remove key parts in the ablation study of Table~\ref{tab:ablation_main}, the curves in figures \ref{fig:CIFAR-10_Adaptive_comparison}-\ref{fig:SVHN_Label_Flip_comparison} would steepen in predictable ways. Removing gradient clipping would hurt the gradient scaling figures. Removing performance consistency would hurt the label flip figures. Removing temporal behavior or reputation decay would harm the adaptive attack figures. These links support the claim that the gains come from complementary parts working together rather than from a single heuristic.
+
+% Small, non-monotonic changes are expected at intermediate attacker fractions because the adaptive threshold and reputation updates adjust as the system accumulates evidence about client behavior. These variations are modest and do not change the overall ordering. The main result is stable: \textit{FLARE} maintains the highest accuracy and the slowest degradation on all datasets and attack types.
+
+
+\section{Statistical Mimicry (SM) Attack}
+\label{sec:sm_attack}
+
+\textbf{Attacker Assumptions.}
+We define attacker knowledge levels based on the information available to them: 
+\begin{enumerate}
+    \item \textbf{Local only}, where an attacker knows only its own data and gradient; 
+    \item \textbf{Colluding}, where multiple attackers pool their local information to estimate aggregate statistics; and 
+    \item \textbf{Server-side state estimation}, where the attacker can infer global statistics (e.g., the aggregated model, honest client statistics) from the server.
+\end{enumerate}
+The Statistical Mimicry (SM) attack requires a highly knowledgeable adversary. Specifically, the attacker must be able to generate realistic estimates of the honest clients' mean $\hat{\mu}_{\mathrm{honest}}^t$ and covariance $\hat{\Sigma}_{\mathrm{honest}}^t$ in each round. This threat model aligns with a Colluding or Server-side state estimation adversary. For instance, a coalition of attackers can use their individual honest-proxy gradients ($g^{\mathrm{honest},t}$) to compute these statistics internally, which are then used as inputs for the attack.
+
+\textbf{Goal.} Craft updates that are statistically consistent with honest behavior on a per-round basis while inducing a persistent drift along a unit target direction $d$ that accumulates across rounds.
+
+\textbf{Parameterization.} For malicious client $i$ at round $t$,
+\[
+\tilde{g}_i^t=(1-\alpha)\,g_i^{\mathrm{honest},t} \;+\; \alpha\big(\hat{\mu}_{\mathrm{honest}}^t+\epsilon_t\big) \;+\; \gamma_t d,
+\]
+where $g_i^{\mathrm{honest},t}$ denotes the update that $i$ would have sent honestly (or a proxy). The mixing coefficient $\alpha\in(0,1)$ controls the trade-off between plausibility and templating, $\hat{\mu}_{\mathrm{honest}}^t$ is the attacker's estimate of the honest mean. The noise $\epsilon_t\sim\mathcal{N}(0,\hat{\Sigma}_{\mathrm{honest}}^t)$ matches the attacker's estimate of the honest covariance and the scalar bias $\gamma_t$ varies slowly so that $|\gamma_t|$ remains below per-round detection thresholds while $\sum_{t=1}^T\gamma_t$ achieves a target cumulative bias $B$.
+
+\textbf{Impact model.} Under simple FedAvg with learning rate $\eta$ and attacker fraction $\rho$, the expected incremental drift in direction $d$ per round satisfies $\Delta_t \approx -\eta\rho\gamma_t$. Colluding adversaries therefore choose $\{\gamma_t\}_{t=1}^T$ to maximize $\sum_t \Delta_t$ subject to stealth constraints (e.g., coordinate-wise limits and distributional tests).
+
+\begin{algorithm}[h]
+\caption{Statistical Mimicry (SM): per-client routine}
+\label{alg:sm}
+\DontPrintSemicolon
+\SetKwInOut{Input}{Input}
+\SetKwInOut{Output}{Output}
+\Input{proxy honest gradient $g^{\mathrm{honest},t}$, estimates $(\hat{\mu}_{\mathrm{honest}}^t,\hat{\Sigma}_{\mathrm{honest}}^t)$, mix $\alpha$, target $d$, stealth bound $\Gamma_t$}
+\Output{malicious gradient $\tilde{g}^t$}
+Sample $\epsilon_t \sim \mathcal{N}(0,\hat{\Sigma}_{\mathrm{honest}}^t)$\;
+Choose $\gamma_t$ within the stealth bound (e.g., $\gamma_t\leftarrow B/T$ for horizon $T$)\;
+Set $\tilde{g}^t \leftarrow (1-\alpha)\,g^{\mathrm{honest},t} + \alpha(\hat{\mu}_{\mathrm{honest}}^t+\epsilon_t) + \gamma_t d$\;
+Optionally clip or project $\tilde{g}^t$ to satisfy per-round detection thresholds\;
+\Return{$\tilde{g}^t$}
+\end{algorithm}
+
+
+\end{document}

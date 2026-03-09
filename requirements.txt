@@ -1,0 +1,35 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# FLARE – Core dependencies
+# Install with:  pip install -r requirements.txt
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Federated Learning ────────────────────────────────────────────────────────
+flwr[simulation]==1.20.0          # Flower framework (server + client + simulation)
+flwr-datasets[vision]>=0.5.0      # Flower dataset utilities (vision datasets)
+
+# ── Deep Learning ─────────────────────────────────────────────────────────────
+# NOTE: if you are on a GPU machine, install the matching CUDA wheel instead.
+# Example (CUDA 12.4):
+#   pip install torch==2.8.0 torchvision==0.23.0 --index-url https://download.pytorch.org/whl/cu124
+torch                 # PyTorch (CPU build fallback)
+torchvision             # TorchVision (datasets + transforms)
+
+# ── Scientific Computing ──────────────────────────────────────────────────────
+numpy
+scipy
+pandas
+
+# ── Machine Learning Utilities ────────────────────────────────────────────────
+scikit-learn              # sklearn.cluster.HDBSCAN (used by FLAME)
+                                  # sklearn.decomposition.PCA
+                                  # sklearn.covariance.{MinCovDet,LedoitWolf}
+                                  # sklearn.metrics, etc.
+
+# ── Simulation / Parallelism ──────────────────────────────────────────────────
+ray                     # Ray backend for Flower simulation
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Optional – install for better FLAME clustering performance
+# ─────────────────────────────────────────────────────────────────────────────
+# hdbscan>=0.8.33                 # Standalone HDBSCAN (fallback if sklearn < 1.3)
+                                  # Uncomment if your sklearn is older than 1.3.
