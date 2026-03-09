@@ -221,11 +221,6 @@ Use a single `iid-level` value — it automatically selects the right Dirichlet 
 iid-level = 0.3   # Strongly Non-IID
 ```
 
-**Via CLI (local simulation):**
-```bash
-flwr run . local-simulation --run-config "iid-level=0.5"
-```
-
 **Via experiment scripts:**
 ```bash
 python -m experiments.run_flare --iid-level 0.3 --rounds 5
