@@ -60,17 +60,7 @@ pip install -e .
 
 Flower's simulation mode runs all components (SuperLink, ServerApp, ClientApps) in a single process using Ray.  This is the easiest way to get started.
 
-### 4.1 Start a simulation
-
-```bash
-# Default config (defined in pyproject.toml)
-flwr run . local-simulation
-
-# Override config values on the command line
-flwr run . local-simulation --run-config "num-server-rounds=5 dataset='ylecun/mnist' iid-level=1.0 total-max-samples=300 malicious-probability=0.3"
-```
-
-### 4.2 Available datasets
+### 4.1 Available datasets
 
 | Config value | Dataset |
 |---|---|
@@ -102,7 +92,7 @@ Results are saved to `results/flare/`.
 All baseline scripts share a common CLI interface. Results are saved as `.json` files in the `results/` directory, compatible with standard plotting tools. Use `--help` to see all available options.
 
 ### 6.1 Common options
-## please check all the options to be currect and do notrely on default. based on the paper figure caption enable the required options. every time we need to put this :
+## Please check all options to be correct and do not rely on the default. Based on the paper figure caption, enable the required options. Every time we need to put this:
 `--local-epochs 5 --total-max-samples -1` with 200 rounds and 100 clients
 | Option | Default | Description |
 |---|---|---|
@@ -124,7 +114,8 @@ For simulations on machines with NVIDIA GPUs, you can significantly accelerate t
 - **`--gpu-resources 1.0`**: Exclusive access. Only one client trains on the GPU at a time.
 - **`--gpu-resources 0.0`**: Default. Simulation runs on CPU only.
 
-Example:
+Some examples Example:
+CLEAN IID CIFAR10 with 200 rounds, 100 clients
 ```bash
 python -m experiments.run_flare --num-clients 100 --dataset cifar10 --gpu-resources 0.1 --rounds 200 --local-epochs 5 --total-max-samples -1
 ```
