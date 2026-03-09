@@ -1,4 +1,4 @@
-# FLARE 
+# Adaptive Multi-Dimensional Reputation for Robust Client Reliability in Federated Learning
 
 ## 1. Quick Start
 
@@ -6,12 +6,6 @@
 # Clone and install
 git clone <repo-url> && cd FLARE-main
 pip install -e .
-
-# Run the FLARE (ByeBye-BadClients) strategy locally (2 rounds, MNIST, fully IID)
-flwr run . local-simulation --run-config "num-server-rounds=2 dataset='ylecun/mnist' iid-level=1.0 total-max-samples=200"
-
-# Run a specific baseline (FedAvg, 3 rounds, MNIST, 10 clients)
-python -m experiments.run_fedavg --rounds 3 --dataset mnist --num-clients 10 --iid-level 1.0
 ```
 
 ---
@@ -89,24 +83,7 @@ flwr run . local-simulation --run-config "num-server-rounds=5 dataset='ylecun/mn
 
 ## 5. Reproducing the FLARE Experiment
 
-The default `flwr run . local-simulation` command runs the **FLARE (WeightedFedAvg / ByeBye-BadClients)** strategy.  To precisely reproduce the paper's experiment:
-
-```bash
-flwr run . local-simulation --run-config "
-  num-server-rounds=10
-  dataset='ufldl-stanford/svhn'
-  total-max-samples=2000
-  iid-level=1.0
-  malicious-probability=0.4
-  attack-patterns='statistical-mimicry'
-  no-defense-fedavg=false
-  fraction-fit=0.2
-  fraction-evaluate=0.8
-  local-epochs=5
-"
-```
-
-Or via the standalone script:
+the standalone script:
 
 ```bash
 python -m experiments.run_flare \
